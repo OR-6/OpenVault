@@ -1,0 +1,16 @@
+# Core dependencies
+rich
+cryptography
+pyotp
+qrcode
+pyperclip
+
+# Optional: QR code scanning from webcam or image
+opencv-python
+pillow
+pyzbar
+
+# Optional: File dialog support
+# tkinter is usually preinstalled with Python on Windows/macOS.
+# On some Linux distros, install via system package manager:
+#   sudo apt install python3-tk
