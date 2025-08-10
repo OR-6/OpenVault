@@ -15,7 +15,7 @@ We take security seriously and provide security updates for the following versio
 OpenVault implements multiple layers of security to protect your sensitive data:
 
 ### Encryption Standards
-- **AES-256 Encryption**: All vault data encrypted using Fernet (AES-256 in CBC mode with HMAC)
+- **Fernet Encryption (AES-128-CBC + HMAC)**: All vault data encrypted using Fernet (AES in CBC mode with PKCS7 padding and HMAC-SHA256 authentication)
 - **Key Derivation**: PBKDF2 with SHA-256, salt, and configurable iterations
 - **Cryptographic Library**: Uses Python's `cryptography` library, which follows industry best practices
 
@@ -26,7 +26,7 @@ OpenVault implements multiple layers of security to protect your sensitive data:
 - **Secure Temporary Files**: Encrypted temporary files with automatic deletion
 
 ### Operational Security
-- **Master Password Protection**: Strong password requirements with entropy validation
+- **Master Password Protection**: Strong password recommendations with entropy validation
 - **Clipboard Security**: Automatic clipboard clearing after configurable timeout
 - **Session Management**: Vault automatically locks after inactivity
 - **Secure Deletion**: Overwriting of temporary files before deletion
@@ -137,7 +137,7 @@ OpenVault is designed to protect against:
 ## Cryptographic Details
 
 ### Algorithms Used
-- **Symmetric Encryption**: AES-256 in CBC mode with PKCS7 padding
+- **Symmetric Encryption**: AES-128 in CBC mode with PKCS7 padding (via Fernet)
 - **Message Authentication**: HMAC-SHA256
 - **Key Derivation**: PBKDF2 with SHA-256, 100,000 iterations minimum
 - **Random Number Generation**: OS-provided cryptographically secure random numbers

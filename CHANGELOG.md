@@ -12,22 +12,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Core Features
 - Password manager with category organization and secure storage
 - Two-factor authentication (TOTP) generator with QR code import support
-- Secure file locker with AES-256 Fernet encryption
+- Secure file locker with Fernet (AES-128-CBC + HMAC) encryption
 - Encrypted notes system with category management
 - Master password protection with PBKDF2 key derivation
 
 #### Security Features
 - Zero-knowledge architecture with local-only data storage
-- AES-256 encryption for all vault data using Fernet symmetric encryption
+- Vault encryption using Fernet symmetric encryption (AES-128-CBC with HMAC)
 - Secure key derivation using PBKDF2 with salt
 - Automatic clipboard clearing with configurable timeout (default: 15 seconds)
 - Secure temporary file handling and cleanup
 
 #### User Interface
 - Rich terminal-based user interface with color coding and formatting
-- Interactive menu system with keyboard navigation
+- Interactive menu system with number-based selection
 - Real-time feedback and status messages
-- Progress indicators for long-running operations
+- Progress indicators for encryption/decryption
 - First-time setup wizard for vault initialization
 
 #### Password Management
@@ -42,22 +42,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - QR code import via webcam scanning
 - QR code import from image files
 - Manual secret key entry support
+- Automatic detection of algorithm, digits, and period from otpauth URIs
 - Real-time code generation with countdown timers
-- Backup and recovery options
+- Export 2FA secrets as QR codes for backup
 
 #### File Security
 - Encrypt and store files of any type and size
 - Organized storage with metadata tracking
-- File integrity verification
+- Optional opening of decrypted files immediately after extraction
 - Secure deletion of temporary files
-- Support for nested directory structures
 
 #### Notes System
 - Create and manage encrypted text notes
 - Category-based organization
-- Rich text editing capabilities
 - Search functionality across all notes
-- Export options for backup purposes
 
 #### Cross-Platform Support
 - Windows compatibility with proper path handling
@@ -70,23 +68,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive error handling and user feedback
 - Memory-safe operations with automatic cleanup
 - Configuration management with sensible defaults
-- Extensible plugin architecture for future enhancements
+- Easily extensible for future enhancements
 
 ### Dependencies
 - `cryptography` ^41.0.0 - Encryption and cryptographic operations
 - `pyotp` ^2.9.0 - Time-based one-time password generation
-- `qrcode[pil]` ^7.4.2 - QR code generation and processing
+- `qrcode[pil]` ^7.4.2 - QR code generation
 - `rich` ^13.7.0 - Enhanced terminal user interface
 - `pillow` ^10.0.0 - Image processing for QR code handling
+- *(Optional)* `opencv-python` - Webcam QR scanning
+- *(Optional)* `pyzbar` - QR code decoding
 
 ### Known Issues
-- File upload functionality may not work on systems with strict filesystem permissions
-- QR code scanning via webcam may fail on systems with camera access restrictions or missing video codecs
+- File upload dialog may not open on some systems without GUI libraries
+- QR code scanning via webcam may fail on systems with camera access restrictions or missing codecs
 - Some antivirus software may flag encrypted vault files as suspicious (false positive)
 
 ### Security Notes
 - All cryptographic operations use industry-standard implementations
-- No network communication - completely offline operation
+- No network communication — completely offline operation
 - Vault data is encrypted at rest using strong encryption standards
 - Master password is never stored in plaintext
 
@@ -96,8 +96,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Versioning Strategy
 This project follows [Semantic Versioning](https://semver.org/):
-- **MAJOR** version for incompatible API changes
-- **MINOR** version for backwards-compatible functionality additions
+- **MAJOR** version for incompatible changes
+- **MINOR** version for backwards-compatible feature additions
 - **PATCH** version for backwards-compatible bug fixes
 
 ### Release Types
@@ -108,10 +108,10 @@ This project follows [Semantic Versioning](https://semver.org/):
 ### Support Policy
 - Latest major version receives full support
 - Previous major version receives security updates for 6 months
-- Critical security issues will be backported when feasible
+- Critical security issues may be backported when feasible
 
 ### Upgrade Notes
-For future releases, upgrade instructions and breaking changes will be documented here.
+Future releases will include upgrade instructions and note any breaking changes here.
 
 ---
 

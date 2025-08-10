@@ -5,33 +5,34 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/OR-6/OpenVault/releases)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/OR-6/OpenVault/graphs/commit-activity)
 
-A secure, open-source password manager, 2FA generator, and secure file locker built with Python. OpenVault provides enterprise-grade security for personal use with an intuitive command-line interface.
+A secure, open-source password manager, 2FA generator, secure notes app, and file locker built with Python.  
+OpenVault combines strong encryption with an intuitive command-line interface to protect your sensitive data locally.
 
 ## Features
 
-- **Password Management**: Organize and secure passwords with custom categories
-- **Two-Factor Authentication**: Generate TOTP codes with QR code import and webcam scanning support
-- **Secure File Storage**: Encrypt and store sensitive files using Fernet/AES encryption
-- **Encrypted Notes**: Create and manage secure notes with category organization
-- **Cross-Platform**: Compatible with Windows, macOS, and Linux
-- **Zero-Knowledge Architecture**: All encryption happens locally on your device
+- **Password Management**: Store and organize passwords with custom categories
+- **Two-Factor Authentication**: Generate TOTP codes with QR code import (image or webcam)
+- **Secure File Storage**: Encrypt and store sensitive files locally
+- **Encrypted Notes**: Create and manage secure text notes
+- **Cross-Platform**: Works on Windows, macOS, and Linux
+- **Zero-Knowledge Architecture**: All encryption and decryption happens locally
 
 ## Security
 
-OpenVault implements industry-standard security practices:
+OpenVault uses modern, proven cryptographic methods:
 
-- **AES-256 Encryption**: All data encrypted using Fernet (AES-256 in CBC mode)
-- **PBKDF2 Key Derivation**: Master password protection with salt and iterations
-- **Zero-Knowledge Design**: No data transmitted to external servers
-- **Secure Memory Handling**: Automatic clipboard clearing after specified timeout
-- **Local Storage Only**: All vault data remains on your local filesystem
+- **AES-128 (via Fernet)**: All vault data and files are encrypted using Fernet (AES in CBC mode with HMAC authentication)
+- **PBKDF2 Key Derivation**: Protects the master password using a salt and many iterations
+- **Zero-Knowledge**: No data leaves your device; no remote storage
+- **Clipboard Auto-Clear**: Copies expire automatically after a configurable timeout
+- **Local Storage Only**: Your data stays in your local filesystem
 
 ## Installation
 
 ### Prerequisites
 
 - Python 3.8 or higher
-- pip package manager
+- pip (Python package manager)
 
 ### From Source
 
@@ -44,119 +45,124 @@ python main.py
 
 ### Dependencies
 
-The following Python packages are required:
+Required packages:
 
-- `cryptography` - Encryption and key derivation
-- `pyotp` - Time-based one-time password generation
-- `qrcode` - QR code generation and processing
-- `rich` - Enhanced terminal UI
-- `pillow` - Image processing for QR codes
+* `cryptography` — encryption and key handling
+* `pyotp` — time-based one-time password generation
+* `qrcode` — QR code creation for 2FA backups
+* `rich` — styled command-line interface
+* `pillow` — image handling for QR decoding
+
+Optional (for advanced QR scanning features):
+
+* `opencv-python` — webcam QR scanning
+* `pyzbar` — QR code decoding
 
 ## Quick Start
 
-1. **First Run**: Launch OpenVault and create your master password
+1. **First Run**: Launch OpenVault and set your master password:
+
    ```bash
    python main.py
    ```
-
-2. **Add a Password**: Navigate to Password Manager → Add Password
-
-3. **Setup 2FA**: Go to 2FA Authenticator → Add 2FA and scan a QR code
-
-4. **Store Files**: Use Secure File Locker → Upload File to encrypt sensitive documents
-
-5. **Create Notes**: Access Secure Notes → Add Note for encrypted text storage
+2. **Add a Password**: Password Manager → Add Password
+3. **Set Up 2FA**: 2FA Authenticator → Add 2FA → Scan QR or enter secret
+4. **Store Files**: Secure File Locker → Upload File
+5. **Create Notes**: Secure Notes → Add Note
 
 ## Usage
 
 ### Password Manager
-Store and organize passwords with custom categories. Features include:
-- Secure password generation
-- Category-based organization
-- Quick search and filtering
-- Automatic clipboard management
+
+* Add, view, edit, and delete entries
+* Category-based organization
+* Optional password generator
+* Clipboard auto-clear for sensitive fields
 
 ### 2FA Authenticator
-Generate time-based authentication codes:
-- Import from QR codes via webcam or image files
-- Manual secret key entry
-- Real-time code generation with countdown timer
-- Export backup codes
+
+* Import from QR (webcam or image file)
+* Manual secret key entry
+* Automatic detection of algorithm, digits, and period from otpauth URIs
+* Real-time code generation with expiry countdown
+* Export 2FA secrets as QR for backup
 
 ### Secure File Locker
-Encrypt and store sensitive files:
-- Drag-and-drop file encryption
-- Support for any file type
-- Organized storage with metadata
-- Secure deletion of temporary files
+
+* Encrypt and store any file type
+* Organized by category
+* Decrypt to a chosen location
+* Option to open decrypted files immediately
 
 ### Secure Notes
-Create encrypted text notes:
-- Rich text support
-- Category organization
-- Full-text search capabilities
-- Export to encrypted files
+
+* Create encrypted text notes
+* Category organization
+* View, edit, and delete notes
 
 ## Configuration
 
-OpenVault stores data in the following locations:
+Vault data is stored locally:
 
-- **Linux/macOS**: `~/.config/openvault/`
-- **Windows**: `%APPDATA%\openvault\`
+* **Linux/macOS**: `~/.config/openvault/`
+* **Windows**: `%APPDATA%\openvault\`
 
-Configuration files:
-- `vault.enc` - Encrypted vault database
-- `config.json` - Application settings
-- `locker/` - Encrypted file storage directory
+Key files:
+
+* `vault.enc` — Encrypted vault database
+* `config.json` — App settings
+* `locker/` — Encrypted file storage
 
 ## Contributing
 
-Contributions are welcome! Please read our contributing guidelines before submitting pull requests.
-
-### Development Setup
+Pull requests are welcome. To contribute:
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Make your changes and add tests
-4. Ensure all tests pass: `python -m pytest`
-5. Submit a pull request
+2. Create a feature branch:
+   `git checkout -b feature-name`
+3. Make changes and add tests
+4. Run tests:
+   `python -m pytest`
+5. Open a pull request
 
-### Reporting Issues
+## Reporting Issues
 
-Please use the GitHub issue tracker to report bugs or request features. Include:
-- Python version
-- Operating system
-- Steps to reproduce the issue
-- Expected vs actual behavior
+Please use GitHub Issues. Include:
 
-## Security Considerations
+* Python version
+* OS
+* Steps to reproduce
+* Expected vs. actual results
 
-- Always use a strong, unique master password
-- Regularly backup your vault file to a secure location
-- Keep the application updated to receive security patches
-- Consider using full-disk encryption on your system
+## Security Tips
+
+* Use a strong, unique master password
+* Backup your vault file securely
+* Keep your OpenVault installation up-to-date
+* Consider full-disk encryption for added protection
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+MIT License — see [LICENSE](LICENSE) for details.
 
 ## Disclaimer
 
-While OpenVault implements strong encryption and security practices, no software is 100% secure. Use at your own risk and always maintain backups of important data.
+While OpenVault uses strong encryption, no software can guarantee absolute security.
+Use at your own risk and maintain secure backups.
 
 ## Author
 
 **OR-6**
-- GitHub: [@OR-6](https://github.com/OR-6)
-- Repository: [OpenVault](https://github.com/OR-6/OpenVault)
+
+* GitHub: [@OR-6](https://github.com/OR-6)
+* Repository: [OpenVault](https://github.com/OR-6/OpenVault)
 
 ## Support
 
-For support, please:
-1. Check the [documentation](https://github.com/OR-6/OpenVault/wiki)
-2. Search [existing issues](https://github.com/OR-6/OpenVault/issues)
-3. Create a new issue if needed
+1. Read the [documentation](https://github.com/OR-6/OpenVault/wiki)
+2. Search [issues](https://github.com/OR-6/OpenVault/issues)
+3. Open a new issue if needed
 
 ---
 
-**Star this repository if you find it useful!**
+**⭐ Star this repo if you find it useful!**
