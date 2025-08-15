@@ -45,7 +45,7 @@ class VaultEncryption:
     @staticmethod
     def encrypt_file(input_path: str, out_path: str, password: str,
                      progress_callback: Optional[Callable[[int], None]] = None) -> bool:
-        """Chunk-read the file (progress_callback receives percent 0..100)."""
+        """Read the file in chunks and encrypt in-memory then write salt+encrypted bytes."""
         try:
             file_size = os.path.getsize(input_path)
             read = 0

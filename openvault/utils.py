@@ -2,7 +2,10 @@
 import datetime
 import hashlib
 import threading
-from typing import Optional, Callable
+from typing import Optional, Callable, Dict, Any
+import json
+import os
+from . import config
 
 def format_timestamp(ts: str) -> str:
     try:
@@ -20,7 +23,7 @@ def format_size(size: int) -> str:
         s /= 1024.0
     return f"{s:.2f} PB"
 
-# Map algorithm name to hashlib function (pyotp accepts digest callable).
+
 ALGO_MAP = {
     "SHA1": hashlib.sha1,
     "SHA256": hashlib.sha256,
@@ -48,3 +51,22 @@ class ClipboardManager:
                 self.on_cleared()
         except Exception:
             pass
+
+def load_config() -> Dict[str, Any]:
+    os.makedirs(config.CONFIG_DIR, exist_ok=True)
+    if not os.path.exists(config.CONFIG_FILE):
+        cfg = config.DEFAULT_CONFIG.copy()
+        save_config(cfg)
+        return cfg
+    try:
+        with open(config.CONFIG_FILE, "r") as f:
+            return json.load(f)
+    except Exception:
+        cfg = config.DEFAULT_CONFIG.copy()
+        save_config(cfg)
+        return cfg
+
+def save_config(cfg: Dict[str, Any]) -> None:
+    os.makedirs(config.CONFIG_DIR, exist_ok=True)
+    with open(config.CONFIG_FILE, "w") as f:
+        json.dump(cfg, f, indent=2)

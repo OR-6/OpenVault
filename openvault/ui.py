@@ -9,13 +9,10 @@ from rich import box
 from rich.prompt import Prompt, Confirm
 from typing import List, Union, Optional
 from .utils import ClipboardManager
-from . import config
 import shutil
-import os
 
 console = Console()
 
-# Clipboard manager will be set from main
 _clipboard_manager: Optional[ClipboardManager] = None
 
 BANNER = r"""
@@ -45,20 +42,11 @@ def terminal_width():
         return 80
 
 def show_header(title: str, subtitle: str = None):
-    """Show a nice header with banner, title, and version footer."""
     console.rule("[bold blue]OpenVault[/bold blue]")
-
-    banner_lines = BANNER.strip("\n").splitlines()
-    banner_text = "\n".join(banner_lines)
-
-    # Footer with version
-    footer_text = f"[dim]Version {config.APP_VERSION}[/dim]"
-
+    banner_lines = BANNER.strip("\n")
     header_panel = Panel(
-        Align.center(Text(banner_text, style="bold magenta")),
+        Align.center(Text(banner_lines, style="bold magenta")),
         title=f"[bold cyan]{title}[/] {f'- {subtitle}' if subtitle else ''}",
-        subtitle=footer_text,
-        subtitle_align="center",
         border_style="bright_blue",
         box=box.ROUNDED
     )
@@ -76,21 +64,13 @@ def confirm(prompt: str) -> bool:
     return Confirm.ask(f"[yellow]{prompt}[/]")
 
 def show_menu(options: List[str], title: str = None, return_index: bool = False) -> Union[str,int]:
-    """
-    Enhanced menu:
-     - shows a pretty numbered list
-     - accepts number input
-     - returns option text or index
-    """
     if title:
         console.print(Panel(f"[bold]{title}[/]", box=box.SIMPLE, style="bright_black"))
-    # Print options with numbers and alternating styles
     for i, opt in enumerate(options, 1):
         console.print(f"[bold green]{i}[/]. [white]{opt}[/]")
     while True:
         choice = Prompt.ask("[bold]Enter your choice[/]", default="1")
         if choice.strip() == "":
-            # empty input -> treat as cancel/back if present
             if "Back" in options:
                 idx = options.index("Back")
                 return idx if return_index else options[idx]
@@ -104,7 +84,6 @@ def show_menu(options: List[str], title: str = None, return_index: bool = False)
         console.print("[red]Choice out of range[/]")
 
 def show_table(title: str, columns: List[str], rows: List[List[str]]):
-    """Pretty table with auto width handling."""
     table = Table(title=title, box=box.ROUNDED, show_lines=False)
     for col in columns:
         table.add_column(col, overflow="fold")
@@ -113,17 +92,16 @@ def show_table(title: str, columns: List[str], rows: List[List[str]]):
     console.print(table)
 
 def about_panel(app_name: str, version: str, author: str = "Unknown", repo: str = None):
-    """Return an About panel text block."""
     lines = [
         f"[bold cyan]{app_name} v{version}[/]",
         "",
         "[dim]A secure open-source password manager, 2FA generator, and secure file locker.[/]",
         "",
         "[bold]Features:[/]",
-        "• Password management with categories",
-        "• TOTP / 2FA management with QR import & webcam scanning",
-        "• Secure file encryption (Fernet/AES)",
-        "• Encrypted notes & categories",
+        "• Passwords with categories and search",
+        "• TOTP / 2FA with QR import & webcam scanning",
+        "• Secure file encryption & backups",
+        "• Encrypted notes & multi-vault support",
         "",
         f"[bold]Author:[/] {author}",
     ]
